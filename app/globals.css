@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: only light;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(1200px 800px at 80% -20%, rgba(102, 194, 178, 0.18), transparent 55%),
+    radial-gradient(1000px 700px at -10% 20%, rgba(140, 215, 201, 0.22), transparent 60%),
+    #f6f3ea;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
