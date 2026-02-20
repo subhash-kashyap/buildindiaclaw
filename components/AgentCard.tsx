@@ -25,7 +25,7 @@ export default function AgentCard({
               <span className={`h-2 w-2 rounded-full ${online ? "bg-mint-500" : "bg-rose-400"}`} />
               {online ? "ONLINE" : "OFFLINE"}
             </div>
-            <span className="text-lg text-ink-400">›</span>
+            <span className="text-lg text-ink-400">&gt;</span>
           </div>
         </div>
         <div className="mt-4 grid gap-3 text-sm text-ink-700">
