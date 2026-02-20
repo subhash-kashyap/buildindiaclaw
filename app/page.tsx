@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/lib/store";
 import AgentCard from "@/components/AgentCard";
-import ActivityFeed from "@/components/ActivityFeed";
+import ActivityToggle from "@/components/ActivityToggle";
 import Onboarding from "@/components/Onboarding";
 import AgentSelector from "@/components/AgentSelector";
 import SettingsSheet from "@/components/SettingsSheet";
@@ -42,6 +42,7 @@ export default function HomePage() {
             ...
           </button>
         </div>
+        <ActivityToggle events={events} />
         {primaryAgent ? (
           <AgentCard agent={primaryAgent} onOpen={handleSelect} onSelect={handleSelect} />
         ) : (
@@ -49,11 +50,6 @@ export default function HomePage() {
             <div className="text-sm text-ink-600">No agents yet. Start the demo to seed data.</div>
           </div>
         )}
-
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-600">Recent Activity</div>
-          <ActivityFeed events={events} />
-        </div>
       </div>
 
       {showSelector ? (

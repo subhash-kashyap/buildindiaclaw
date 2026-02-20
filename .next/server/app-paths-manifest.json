@@ -1,9 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/chat/[agentId]/page": "app/chat/[agentId]/page.js",
-  "/friends/page": "app/friends/page.js",
-  "/observatory/page": "app/observatory/page.js",
-  "/memory/[memoryId]/page": "app/memory/[memoryId]/page.js",
-  "/memory/page": "app/memory/page.js",
-  "/api/anthropic/route": "app/api/anthropic/route.js"
-}

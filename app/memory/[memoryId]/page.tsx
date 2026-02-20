@@ -30,7 +30,7 @@ export default function MemoryFilePage() {
             </Link>
           </div>
           <div className="mt-2 text-xs text-ink-600">
-            {entry?.updatedAt} • {entry?.size} • Markdown
+            {entry?.updatedAt} | {entry?.size} | Markdown
           </div>
         </div>
 

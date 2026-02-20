@@ -220,32 +220,32 @@ export const initialCrons: CronJob[] = [
     id: "cron-1",
     agentId: "self-1",
     name: "Daily build health",
-    cadence: "Every day • 07:30",
-    nextRun: "Feb 16, 2026 • 07:30",
+    cadence: "Every day | 07:30",
+    nextRun: "Feb 16, 2026 | 07:30",
     status: "scheduled"
   },
   {
     id: "cron-2",
     agentId: "self-1",
     name: "Incident digest",
-    cadence: "Weekdays • 18:00",
-    nextRun: "Feb 16, 2026 • 18:00",
+    cadence: "Weekdays | 18:00",
+    nextRun: "Feb 16, 2026 | 18:00",
     status: "scheduled"
   },
   {
     id: "cron-3",
     agentId: "self-1",
     name: "Experiment sync",
-    cadence: "Mon/Wed/Fri • 09:00",
-    nextRun: "Feb 17, 2026 • 09:00",
+    cadence: "Mon/Wed/Fri | 09:00",
+    nextRun: "Feb 17, 2026 | 09:00",
     status: "scheduled"
   },
   {
     id: "cron-4",
     agentId: "self-1",
     name: "Runbook refresh",
-    cadence: "Weekly • Sun 16:00",
-    nextRun: "Feb 22, 2026 • 16:00",
+    cadence: "Weekly | Sun 16:00",
+    nextRun: "Feb 22, 2026 | 16:00",
     status: "scheduled"
   }
 ];
@@ -309,7 +309,7 @@ export const initialMemory: MemoryEntry[] = [
     updatedAt: "2026-02-15 09:20",
     size: "14 KB",
       content:
-      "# Daily Memory — 2026-02-15\n\n## Summary\n- Stabilized pipeline.\n- Refined deployment checklist.\n- Confirmed experiment readiness.\n- Added conversation history to demo chat.\n\n## Notes\n- Agent restart mock should include status transitions.\n- New cron schedule slots to show next 7 days.\n- Add friend flow should create both friend + claw channels.\n\n## Decisions\n- Use mint accents with cream base.\n- Keep command blocks monospace only.\n- Friend claw replies show only response line.\n\n## TODO\n- Layer in more realistic system metrics.\n- Expand memory files beyond four entries.\n"
+      "# Daily Memory - 2026-02-15\n\n## Summary\n- Stabilized pipeline.\n- Refined deployment checklist.\n- Confirmed experiment readiness.\n- Added conversation history to demo chat.\n\n## Notes\n- Agent restart mock should include status transitions.\n- New cron schedule slots to show next 7 days.\n- Add friend flow should create both friend + claw channels.\n\n## Decisions\n- Use mint accents with cream base.\n- Keep command blocks monospace only.\n- Friend claw replies show only response line.\n\n## TODO\n- Layer in more realistic system metrics.\n- Expand memory files beyond four entries.\n"
   },
   {
     id: "mem-7",
@@ -319,7 +319,7 @@ export const initialMemory: MemoryEntry[] = [
     updatedAt: "2026-02-14 18:05",
     size: "12 KB",
       content:
-      "# Daily Memory — 2026-02-14\n\n## Summary\n- Drafted postmortem.\n- Compiled incident timeline.\n- Identified noisy alert sources.\n\n## Follow-ups\n- Confirm owner feedback.\n- Verify alert suppression windows.\n- Track long-term fixes across services.\n"
+      "# Daily Memory - 2026-02-14\n\n## Summary\n- Drafted postmortem.\n- Compiled incident timeline.\n- Identified noisy alert sources.\n\n## Follow-ups\n- Confirm owner feedback.\n- Verify alert suppression windows.\n- Track long-term fixes across services.\n"
   },
   {
     id: "mem-8",
@@ -329,6 +329,6 @@ export const initialMemory: MemoryEntry[] = [
     updatedAt: "2026-02-13 11:00",
     size: "10 KB",
     content:
-      "# Daily Memory — 2026-02-13\n\n## Summary\n- Linked experiment dashboard.\n- Highlighted stability delta.\n\n## Notes\n- Keep conversation threads visible in demo mode.\n"
+      "# Daily Memory - 2026-02-13\n\n## Summary\n- Linked experiment dashboard.\n- Highlighted stability delta.\n\n## Notes\n- Keep conversation threads visible in demo mode.\n"
   }
 ];

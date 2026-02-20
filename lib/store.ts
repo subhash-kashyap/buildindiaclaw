@@ -13,12 +13,22 @@ import {
   initialCrons
 } from "./sampleData";
 import { simulateAgentResponse } from "./mockEngine";
+import { simulateRealAgentResponse } from "./realEngine";
 
 const uid = () => `id-${Math.random().toString(36).slice(2, 10)}`;
+
+type RealConnectionStatus = "disconnected" | "pairing" | "connected" | "error";
 
 export type AppState = {
   hasOnboarded: boolean;
   demoMode: boolean;
+  realModeEnabled: boolean;
+  realConnectionStatus: RealConnectionStatus;
+  realPairingId?: string;
+  realPairingCode?: string;
+  realSetupCommand?: string;
+  realPairingExpiresAt?: string;
+  realError?: string;
   agents: Agent[];
   friends: Friend[];
   conversations: Conversation[];
@@ -33,6 +43,11 @@ export type AppState = {
   seedDemo: () => void;
   setDemoMode: (value: boolean) => void;
   resetDemo: () => void;
+  setRealModeEnabled: (value: boolean) => void;
+  startRealPairing: () => Promise<void>;
+  refreshRealPairing: () => Promise<void>;
+  confirmRealPairing: () => Promise<void>;
+  restoreRealState: (data: { enabled: boolean; pairingId?: string }) => void;
   toggleAgentStatus: (agentId: string, nextStatus: Agent["status"]) => void;
   restartAgent: (agentId: string) => void;
   addFriend: (name: string) => void;
@@ -51,6 +66,8 @@ export type AppState = {
 export const useAppStore = create<AppState>((set, get) => ({
   hasOnboarded: false,
   demoMode: true,
+  realModeEnabled: false,
+  realConnectionStatus: "disconnected",
   agents: [],
   friends: [],
   conversations: [],
@@ -91,7 +108,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         messages: initialMessages,
         tasks: initialTasks,
         events: initialEvents,
-        memory: initialMemory
+        memory: initialMemory,
+        crons: initialCrons
       });
     } else {
       set({
@@ -118,6 +136,103 @@ export const useAppStore = create<AppState>((set, get) => ({
       events: [],
       crons: [],
       memory: []
+    });
+  },
+  setRealModeEnabled: (value) => {
+    set({ realModeEnabled: value });
+    if (typeof window !== "undefined") {
+      localStorage.setItem("openclaw:realMode", value ? "1" : "0");
+    }
+    if (!value) {
+      set({
+        realConnectionStatus: "disconnected",
+        realError: undefined
+      });
+    } else if (!get().realPairingId) {
+      set({ realConnectionStatus: "pairing" });
+    }
+  },
+  startRealPairing: async () => {
+    set({ realConnectionStatus: "pairing", realError: undefined });
+    try {
+      const response = await fetch("/api/openclaw-real/pairings", { method: "POST" });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Failed to start pairing");
+      }
+      const data = await response.json();
+      set({
+        realPairingId: data.id,
+        realPairingCode: data.code,
+        realSetupCommand: data.command,
+        realPairingExpiresAt: data.expiresAt,
+        realConnectionStatus: data.status === "connected" ? "connected" : "pairing"
+      });
+      if (typeof window !== "undefined") {
+        localStorage.setItem("openclaw:realPairingId", data.id);
+      }
+    } catch (error) {
+      set({
+        realConnectionStatus: "error",
+        realError: error instanceof Error ? error.message : "Failed to start pairing"
+      });
+    }
+  },
+  refreshRealPairing: async () => {
+    const pairingId = get().realPairingId;
+    if (!pairingId) return;
+
+    try {
+      const response = await fetch(`/api/openclaw-real/pairings/${pairingId}`);
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Failed to refresh pairing");
+      }
+      const data = await response.json();
+      set({
+        realPairingCode: data.code,
+        realSetupCommand: data.command,
+        realPairingExpiresAt: data.expiresAt,
+        realConnectionStatus:
+          data.status === "connected"
+            ? "connected"
+            : data.status === "expired"
+            ? "error"
+            : "pairing",
+        realError: data.status === "expired" ? "Pairing session expired. Start again." : undefined
+      });
+    } catch (error) {
+      set({
+        realConnectionStatus: "error",
+        realError: error instanceof Error ? error.message : "Failed to refresh pairing"
+      });
+    }
+  },
+  confirmRealPairing: async () => {
+    const pairingId = get().realPairingId;
+    if (!pairingId) return;
+
+    try {
+      const response = await fetch(`/api/openclaw-real/pairings/${pairingId}/confirm`, {
+        method: "POST"
+      });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text || "Failed to confirm pairing");
+      }
+      await get().refreshRealPairing();
+    } catch (error) {
+      set({
+        realConnectionStatus: "error",
+        realError: error instanceof Error ? error.message : "Failed to confirm pairing"
+      });
+    }
+  },
+  restoreRealState: ({ enabled, pairingId }) => {
+    set({
+      realModeEnabled: enabled,
+      realPairingId: pairingId,
+      realConnectionStatus: enabled ? "pairing" : "disconnected"
     });
   },
   toggleAgentStatus: (agentId, nextStatus) => {
@@ -244,7 +359,12 @@ export const useAppStore = create<AppState>((set, get) => ({
       typingByConversation: { ...state.typingByConversation, [conversationId]: true }
     }));
 
-    const response = await simulateAgentResponse(content, agent);
+    const { realModeEnabled, realConnectionStatus, realPairingId } = get();
+    const shouldUseReal = realModeEnabled && realConnectionStatus === "connected" && agent.type === "self";
+
+    const response = shouldUseReal
+      ? await simulateRealAgentResponse(content, agent, realPairingId)
+      : await simulateAgentResponse(content, agent);
 
     const agentMessage: Message = {
       id: uid(),
