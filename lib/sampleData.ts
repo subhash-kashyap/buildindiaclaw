@@ -8,7 +8,9 @@ export const initialAgents: Agent[] = [
     status: "online",
     api: "Anthropic Opus",
     lastSummary: "Refined build pipeline and de-risked deploys",
-    activeTasks: 2
+    activeTasks: 2,
+    tokensConsumed: 42000,
+    tokenLimit: 100000
   },
   {
     id: "self-2",
@@ -17,7 +19,9 @@ export const initialAgents: Agent[] = [
     status: "online",
     api: "Anthropic Sonnet",
     lastSummary: "Indexing runbooks and improving alert hygiene",
-    activeTasks: 1
+    activeTasks: 1,
+    tokensConsumed: 12500,
+    tokenLimit: 100000
   },
   {
     id: "self-3",
@@ -26,7 +30,9 @@ export const initialAgents: Agent[] = [
     status: "online",
     api: "OpenAI GPT-4o",
     lastSummary: "Tuning latency budgets across services",
-    activeTasks: 3
+    activeTasks: 3,
+    tokensConsumed: 68000,
+    tokenLimit: 100000
   },
   {
     id: "friend-rahul",

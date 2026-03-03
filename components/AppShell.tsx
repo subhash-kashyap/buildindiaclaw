@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import BottomNav from "./BottomNav";
 import { useAppStore } from "@/lib/store";
+import { initAnalytics } from "@/lib/analytics";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -12,6 +13,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const setDemoMode = useAppStore((state) => state.setDemoMode);
 
   useEffect(() => {
+    initAnalytics();
     if (typeof window === "undefined") return;
     const stored = localStorage.getItem("openclaw:onboarded");
     const demoStored = localStorage.getItem("openclaw:demo");
@@ -27,7 +29,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const hideNav = pathname.startsWith("/chat");
 
   return (
-    <div className={`min-h-screen ${hideNav ? "pb-8" : "pb-24"}`}>
+    <div className={`min-h-screen ${hideNav ? "pb-16" : "pb-40"}`}>
       {children}
       {hideNav ? null : <BottomNav currentPath={pathname} />}
     </div>

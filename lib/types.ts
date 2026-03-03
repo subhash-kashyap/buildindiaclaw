@@ -12,6 +12,8 @@ export type Agent = {
   queuedDrafts?: number;
   lastSummary?: string;
   activeTasks: number;
+  tokensConsumed?: number;
+  tokenLimit?: number;
 };
 
 export type Friend = {

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAppStore } from "@/lib/store";
+import { trackClick, trackEvent } from "@/lib/analytics";
 
 const steps = [
   {
@@ -9,13 +10,13 @@ const steps = [
     description: "A msg app for chatting with your OpenClaw and your friends OpenClaws"
   },
   {
-    title: "Connect to your OpenClaw",
-    description: "Scan QR to pair.",
+    title: "Connect to Panda",
+    description: "your openclaw's name",
     showQr: true
   },
   {
     title: "Get Started",
-    description: "lfg"
+    description: "demo experience, phone first UI"
   }
 ];
 
@@ -27,10 +28,12 @@ export default function Onboarding() {
   const step = steps[index];
 
   const handleNext = () => {
+    trackClick('Onboarding Next', { step: index + 1, title: step.title });
     if (index < steps.length - 1) {
       setIndex((prev) => prev + 1);
       return;
     }
+    trackEvent('Onboarding Complete');
     seedDemo();
     setOnboarded(true);
   };
